@@ -4,3 +4,4 @@ Quarterly_Summary.csv
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
+*.html
