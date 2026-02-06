@@ -203,7 +203,7 @@ for vessel in vessel_order:
         
         fig.add_trace(go.Bar(
             name=task['Resource'],
-            x=[duration],
+            x=[task['Finish']],
             y=[vessel],
             orientation='h',
             base=task['Start'],
