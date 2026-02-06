@@ -20,12 +20,27 @@ The notebook analyzes streamer project data and calculates:
 
 2. **Quarterly Breakdown:**
    - Calculates days spent per quarter for each project
+   - Includes vessel and survey type information for each project
    - Provides swimlane view with quarters as columns
-   - Includes placeholder columns for:
+   - Includes columns for:
+     - Project name
+     - Vessel
+     - Survey Type
+     - Quarter
      - Days in Quarter
      - Avg. Day Rate
      - Total Cost
      - Total Revenue
+
+3. **Vessel Quarterly Aggregation (2025 only):**
+   - Aggregates project data by vessel and quarter
+   - Excludes Q4 2024 and Q1 2026 data
+   - Calculates for each vessel and quarter:
+     - Number of days the vessel spent on projects
+     - Average day rate (weighted by days)
+     - Total cost for the quarter
+     - Total revenue for the quarter
+   - Available in both long and wide (pivot) formats
 
 ### Installation
 
@@ -52,13 +67,23 @@ pip install jupyter pandas openpyxl matplotlib seaborn
 
 ### Output Files
 
-The notebook generates three CSV files:
+The notebook generates one Excel file and multiple CSV files:
 
+**Primary Output:**
+- `Quarterly_Review_Breakdown.xlsx` - Main Excel workbook containing:
+  - **Quarterly Breakdown** - Project-level quarterly breakdown with vessel and survey type
+  - **Quarterly Summary** - Aggregated statistics by quarter
+  - **Vessel Quarterly 2025** - Vessel-aggregated data by quarter (long format)
+  - **Vessel Quarterly Pivot 2025** - Vessel-aggregated data by quarter (wide format)
+
+**CSV Exports (for backward compatibility):**
 - `Enhanced_Streamer_Projects.csv` - Original data with calculated duration columns
 - `Quarterly_Breakdown.csv` - Project-level quarterly breakdown
 - `Quarterly_Summary.csv` - Aggregated statistics by quarter
+- `Vessel_Quarterly_2025.csv` - Vessel quarterly data (long format)
+- `Vessel_Quarterly_Pivot_2025.csv` - Vessel quarterly data (wide format)
 
-Note: Output CSV files are excluded from version control (see .gitignore)
+Note: CSV output files are excluded from version control (see .gitignore). The Excel file is tracked for sharing.
 
 ## Data Source
 
