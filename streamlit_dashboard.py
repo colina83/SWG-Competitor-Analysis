@@ -76,9 +76,15 @@ def create_gantt_data(df):
             
         # Create legend label (Country + Type of Survey)
         country = str(row['Country']) if pd.notna(row['Country']) else 'Unknown'
-        survey_type = str(row['Activity']) if pd.notna(row['Activity']) else 'Unknown'
-        # Clean up survey type
-        if survey_type == 'nan' or survey_type == 'Unknown':
+        survey_type_raw = row['Activity']
+        survey_type = 'Unknown'
+        
+        # Handle survey type - check for NaN/None first, then convert to string
+        if pd.notna(survey_type_raw):
+            survey_type = str(survey_type_raw)
+        
+        # If survey type is still unknown, try to infer from Survey Name
+        if survey_type == 'Unknown':
             # Try to infer from Survey Name column
             survey_name = str(row['Survey Name'])
             if '2D' in survey_name:
@@ -257,7 +263,7 @@ fig.update_layout(
 # Add quarter separators as vertical lines
 for q_name, q_start, q_end in quarters:
     fig.add_vline(
-        x=q_start.timestamp() * 1000,  # Convert to milliseconds
+        x=q_start.timestamp() * 1000,  # Plotly expects milliseconds for date axes (timestamp() returns seconds)
         line_width=2,
         line_dash="dash",
         line_color="gray",
