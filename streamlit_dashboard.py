@@ -57,10 +57,16 @@ streamer_df_2025['Vessel_Display'] = streamer_df_2025['Vessel'].apply(
 
 # Create Gantt chart data
 def create_gantt_data(df):
-    """Create data for Gantt chart with phases"""
+    """Create data for Gantt chart with phases and transit time"""
     tasks = []
     
-    for idx, row in df.iterrows():
+    # Sort by vessel and start date to identify gaps
+    df_sorted = df.sort_values(['Vessel_Display', 'Mobilisation Start'])
+    
+    # Track last end date for each vessel to identify transit gaps
+    vessel_last_end = {}
+    
+    for idx, row in df_sorted.iterrows():
         if pd.isna(row['Mobilisation Start']) or pd.isna(row['Demobilisation End']):
             continue
         
@@ -71,7 +77,35 @@ def create_gantt_data(df):
         # Create legend label (Country + Type of Survey)
         country = str(row['Country']) if pd.notna(row['Country']) else 'Unknown'
         survey_type = str(row['Activity']) if pd.notna(row['Activity']) else 'Unknown'
+        # Clean up survey type
+        if survey_type == 'nan' or survey_type == 'Unknown':
+            # Try to infer from Survey Name column
+            survey_name = str(row['Survey Name'])
+            if '2D' in survey_name:
+                survey_type = '2D'
+            elif '3D' in survey_name:
+                survey_type = '3D'
+            elif '4D' in survey_name:
+                survey_type = '4D'
+            elif 'OBN' in survey_name:
+                survey_type = 'OBN'
+            else:
+                survey_type = 'Survey'
         legend = f"{country} {survey_type}"
+        
+        # Check for transit time gap
+        if vessel in vessel_last_end:
+            last_end = vessel_last_end[vessel]
+            current_start = row['Mobilisation Start']
+            # If there's a gap of more than 1 day, add transit time
+            if (current_start - last_end).days > 1:
+                tasks.append(dict(
+                    Task=vessel,
+                    Start=last_end,
+                    Finish=current_start,
+                    Resource='Transit',
+                    Phase='Transit'
+                ))
         
         # Mobilization phase
         if pd.notna(row['Deployment Start']):
@@ -122,6 +156,9 @@ def create_gantt_data(df):
                 Resource=legend,
                 Phase='Demobilization'
             ))
+        
+        # Update last end date for this vessel
+        vessel_last_end[vessel] = row['Demobilisation End']
     
     return pd.DataFrame(tasks)
 
@@ -244,7 +281,7 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Add color legend
 st.markdown("### Phase Colors")
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3, col4, col5, col6 = st.columns(6)
 with col1:
     st.markdown("🟨 **Mobilization**")
 with col2:
@@ -255,6 +292,8 @@ with col4:
     st.markdown("🟧 **Recovery**")
 with col5:
     st.markdown("🟨 **Demobilization**")
+with col6:
+    st.markdown("⬜ **Transit Time**")
 
 # Add separator
 st.markdown("---")
