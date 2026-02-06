@@ -88,3 +88,79 @@ Note: CSV output files are excluded from version control (see .gitignore). The E
 ## Data Source
 
 The analysis uses data from: `Streamer Projects - SWG - AI.csv`
+
+---
+
+## Streamlit Dashboard
+
+The repository now includes an interactive Streamlit dashboard for visualizing the 2025 vessel project timeline.
+
+### Features
+
+The dashboard provides:
+
+1. **Interactive Gantt-style Timeline Chart:**
+   - Displays all vessels (11 total, including Island Pride (Charter))
+   - Shows project phases with color coding:
+     - Mobilization: Yellow
+     - Deployment: Orange
+     - Production: Green
+     - Recovery: Orange
+     - Demobilization: Yellow
+   - Months displayed on X-axis (at the top)
+   - Quarters marked with vertical lines and labels
+   - Legend format: Country + Type of Survey (e.g., "India 2D")
+   - Interactive hover tooltips with project details
+
+2. **Vessel Quarterly Pivot Table:**
+   - Summary of vessel utilization by quarter (Q1-Q4 2025)
+   - Days worked per quarter
+   - Average day rate
+   - Total cost per quarter
+   - Revenue column removed as requested
+
+### Installation
+
+Install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Or install individually:
+```bash
+pip install pandas openpyxl streamlit plotly
+```
+
+### Running the Dashboard
+
+1. Ensure the data file `Streamer Projects - SWG - AI.csv` is in the repository root
+
+2. Generate the processed data files by running the notebook (or the CSV files should already exist):
+   ```bash
+   # If you need to regenerate data files
+   jupyter notebook "Shearwater Competitor Information.ipynb"
+   # Run all cells in the notebook
+   ```
+
+3. Launch the Streamlit dashboard:
+   ```bash
+   streamlit run streamlit_dashboard.py
+   ```
+
+4. The dashboard will open in your default web browser at `http://localhost:8501`
+
+5. To stop the dashboard, press `Ctrl+C` in the terminal
+
+### Dashboard Files
+
+- `streamlit_dashboard.py` - Main dashboard application
+- `Enhanced_Streamer_Projects.csv` - Processed project data with calculated durations
+- `Vessel_Quarterly_Pivot_2025.csv` - Vessel quarterly summary data
+
+### Usage Tips
+
+- Hover over any bar in the timeline to see detailed project information
+- The timeline shows the entire 2025 calendar year with quarters clearly marked
+- The table at the bottom can be scrolled and sorted as needed
+- The dashboard automatically updates if you regenerate the data files
