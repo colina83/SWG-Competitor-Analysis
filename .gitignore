@@ -1,9 +1,5 @@
-Enhanced_Streamer_Projects.csv
-Quarterly_Breakdown.csv
-Quarterly_Summary.csv
-Vessel_Quarterly_2025.csv
-Vessel_Quarterly_Pivot_2025.csv
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
-*.html
+generate_data.py
+executed_notebook.ipynb
