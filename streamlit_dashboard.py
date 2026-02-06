@@ -165,6 +165,9 @@ def create_gantt_data(df):
 # Create the Gantt chart
 gantt_df = create_gantt_data(streamer_df_2025)
 
+# Filter out any rows with NaT values
+gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
+
 # Define phase colors
 phase_colors = {
     'Mobilization': '#FFD700',     # Yellow
