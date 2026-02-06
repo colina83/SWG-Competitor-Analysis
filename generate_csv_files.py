@@ -2,11 +2,16 @@
 """
 Script to generate the CSV files required by the Streamlit dashboard.
 Based on the Jupyter notebook: Shearwater Competitor Information.ipynb
+
+Prerequisites:
+- Requires 'Streamer Projects - SWG - AI.csv' in the current directory
 """
 
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import os
+import sys
 
 def merge_date_ranges(date_ranges):
     """
@@ -56,10 +61,17 @@ def calculate_days_in_quarter(start_dt, end_dt, year, quarter):
     return (overlap_end - overlap_start).days + 1
 
 def main():
-    print("Loading data from Streamer Projects - SWG - AI.csv...")
+    # Check if source file exists
+    source_file = "Streamer Projects - SWG - AI.csv"
+    if not os.path.exists(source_file):
+        print(f"ERROR: Source file '{source_file}' not found!")
+        print(f"Please ensure the file exists in the current directory: {os.getcwd()}")
+        sys.exit(1)
+    
+    print(f"Loading data from {source_file}...")
     
     # Load the raw data
-    df = pd.read_csv("Streamer Projects - SWG - AI.csv")
+    df = pd.read_csv(source_file)
     print(f"Loaded {len(df)} projects")
     
     # Convert date columns to datetime
@@ -105,12 +117,14 @@ def main():
         start = row['Mobilisation Start']
         end = row['Demobilisation End']
         
-        # Parse day rate and revenue (handle $, commas, spaces)
-        day_rate_str = str(row.get('Avg. Day Rate', '')).replace('$', '').replace(',', '').replace(' ', '').strip()
+        # Parse day rate (handle $, commas, spaces, #DIV/0! errors)
+        # Note: Source data uses 'Day Rate' column which may be empty or contain errors
+        day_rate_str = str(row.get('Day Rate', '')).replace('$', '').replace(',', '').replace(' ', '').replace('#DIV/0!', '').strip()
         day_rate = float(day_rate_str) if day_rate_str and day_rate_str != 'nan' else 0
         
-        revenue_str = str(row.get('Total Revenue', '')).replace('$', '').replace(',', '').replace(' ', '').strip()
-        revenue = float(revenue_str) if revenue_str and revenue_str != 'nan' else 0
+        # Note: Source data does not have a 'Total Revenue' column
+        # Revenue would need to be calculated separately or added to source data
+        revenue = 0
         
         # Calculate days in each quarter of 2025
         for quarter in [1, 2, 3, 4]:
