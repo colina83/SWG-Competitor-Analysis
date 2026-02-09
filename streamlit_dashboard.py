@@ -336,6 +336,7 @@ def merge_date_ranges(date_ranges):
     """
     Merge overlapping date ranges and return the total unique days.
     Prevents double-counting when a vessel works on multiple overlapping projects.
+    Adjacent ranges (e.g., ending Jan 31, starting Feb 1) are merged as continuous work.
     """
     if not date_ranges:
         return 0
@@ -348,7 +349,8 @@ def merge_date_ranges(date_ranges):
     for current_start, current_end in sorted_ranges[1:]:
         last_start, last_end = merged[-1]
         
-        # If current range overlaps or is adjacent to the last range, merge them
+        # If current range overlaps or is adjacent (consecutive days), merge them
+        # Adjacent ranges are considered continuous vessel work (e.g., Jan 31 -> Feb 1)
         if current_start <= last_end + timedelta(days=1):
             merged[-1] = (last_start, max(last_end, current_end))
         else:
