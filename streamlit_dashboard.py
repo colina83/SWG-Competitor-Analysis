@@ -57,13 +57,13 @@ streamer_df_2025['Vessel_Display'] = streamer_df_2025['Vessel'].apply(
 
 # Create Gantt chart data
 def create_gantt_data(df):
-    """Create data for Gantt chart with phases and transit time"""
+    """Create data for Gantt chart with project duration and non-productive time"""
     tasks = []
     
-    # Sort by vessel and start date to identify gaps
+    # Sort by vessel and start date
     df_sorted = df.sort_values(['Vessel_Display', 'Mobilisation Start'])
     
-    # Track last end date for each vessel to identify transit gaps
+    # Track last end date for each vessel to identify non-productive time
     vessel_last_end = {}
     
     for idx, row in df_sorted.iterrows():
@@ -99,72 +99,45 @@ def create_gantt_data(df):
                 survey_type = 'Survey'
         legend = f"{country} {survey_type}"
         
-        # Check for transit time gap
+        # Check for gap with previous project (non-productive time)
         if vessel in vessel_last_end:
             last_end = vessel_last_end[vessel]
             current_start = row['Mobilisation Start']
-            # If there's a gap of more than 1 day, add transit time
+            # If there's a gap of more than 1 day, add non-productive time
             if (current_start - last_end).days > 1:
                 tasks.append(dict(
                     Task=vessel,
                     Start=last_end,
                     Finish=current_start,
-                    Resource='Transit',
-                    Phase='Transit'
+                    Resource='Non-Productive Time',
+                    Phase='Non-Productive Time'
                 ))
         
-        # Mobilization phase
-        if pd.notna(row['Deployment Start']):
-            tasks.append(dict(
-                Task=vessel,
-                Start=row['Mobilisation Start'],
-                Finish=row['Deployment Start'],
-                Resource=legend,
-                Phase='Mobilization'
-            ))
-        
-        # Deployment phase
-        if pd.notna(row['Production Start']):
-            tasks.append(dict(
-                Task=vessel,
-                Start=row['Deployment Start'],
-                Finish=row['Production Start'],
-                Resource=legend,
-                Phase='Deployment'
-            ))
-        
-        # Production phase
-        if pd.notna(row['Production End']):
-            tasks.append(dict(
-                Task=vessel,
-                Start=row['Production Start'],
-                Finish=row['Production End'],
-                Resource=legend,
-                Phase='Production'
-            ))
-        
-        # Recovery phase
-        if pd.notna(row['Retrieval End']):
-            tasks.append(dict(
-                Task=vessel,
-                Start=row['Production End'],
-                Finish=row['Retrieval End'],
-                Resource=legend,
-                Phase='Recovery'
-            ))
-        
-        # Demobilization phase
-        if pd.notna(row['Demobilisation End']):
-            tasks.append(dict(
-                Task=vessel,
-                Start=row['Retrieval End'],
-                Finish=row['Demobilisation End'],
-                Resource=legend,
-                Phase='Demobilization'
-            ))
+        # Single project duration (All Activities) - from Mobilization Start to Demobilization End
+        tasks.append(dict(
+            Task=vessel,
+            Start=row['Mobilisation Start'],
+            Finish=row['Demobilisation End'],
+            Resource=legend,
+            Phase='Project Duration (All Activities)'
+        ))
         
         # Update last end date for this vessel
         vessel_last_end[vessel] = row['Demobilisation End']
+    
+    # Add non-productive time from last project end to end of 2025 for each vessel
+    end_of_2025 = datetime(2025, 12, 31)
+    for vessel in vessel_order:
+        if vessel in vessel_last_end:
+            last_end = vessel_last_end[vessel]
+            if last_end < end_of_2025:
+                tasks.append(dict(
+                    Task=vessel,
+                    Start=last_end,
+                    Finish=end_of_2025,
+                    Resource='Non-Productive Time',
+                    Phase='Non-Productive Time'
+                ))
     
     return pd.DataFrame(tasks)
 
@@ -176,12 +149,8 @@ gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
 
 # Define phase colors
 phase_colors = {
-    'Mobilization': '#FFD700',     # Yellow
-    'Deployment': '#FFA500',        # Orange
-    'Production': '#32CD32',        # Green
-    'Recovery': '#FFA500',          # Orange
-    'Demobilization': '#FFD700',    # Yellow
-    'Transit': '#D3D3D3'            # Light gray
+    'Project Duration (All Activities)': '#32CD32',  # Green
+    'Non-Productive Time': '#D3D3D3'                 # Light gray
 }
 
 # Create the Plotly figure
@@ -290,19 +259,11 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Add color legend
 st.markdown("### Phase Colors")
-col1, col2, col3, col4, col5, col6 = st.columns(6)
+col1, col2 = st.columns(2)
 with col1:
-    st.markdown("🟨 **Mobilization**")
+    st.markdown("🟩 **Project Duration (All Activities)**")
 with col2:
-    st.markdown("🟧 **Deployment**")
-with col3:
-    st.markdown("🟩 **Production**")
-with col4:
-    st.markdown("🟧 **Recovery**")
-with col5:
-    st.markdown("🟨 **Demobilization**")
-with col6:
-    st.markdown("⬜ **Transit Time**")
+    st.markdown("⬜ **Non-Productive Time**")
 
 # Add separator
 st.markdown("---")
