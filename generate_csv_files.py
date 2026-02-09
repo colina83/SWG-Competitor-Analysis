@@ -154,7 +154,23 @@ def main():
             
             if len(q_data) > 0:
                 # Get date ranges for this vessel in this quarter
-                date_ranges = [(row['Start'], row['End']) for _, row in q_data.iterrows()]
+                # IMPORTANT: Use quarter-specific overlap ranges, not full project ranges
+                qtr_start_month = (quarter - 1) * 3 + 1
+                qtr_start = pd.Timestamp(year=2025, month=qtr_start_month, day=1)
+                if quarter == 4:
+                    qtr_end = pd.Timestamp(year=2025, month=12, day=31)
+                else:
+                    next_qtr_start = pd.Timestamp(year=2025, month=qtr_start_month + 3, day=1)
+                    qtr_end = next_qtr_start - pd.Timedelta(days=1)
+                
+                # Calculate quarter-specific date ranges for overlap merging
+                date_ranges = []
+                for _, row in q_data.iterrows():
+                    overlap_start = max(row['Start'], qtr_start)
+                    overlap_end = min(row['End'], qtr_end)
+                    if overlap_start <= overlap_end:
+                        date_ranges.append((overlap_start, overlap_end))
+                
                 unique_days = merge_date_ranges(date_ranges)
                 
                 # Calculate weighted average day rate
