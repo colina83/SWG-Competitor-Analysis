@@ -12,6 +12,7 @@ import numpy as np
 from datetime import datetime
 import os
 import sys
+import shutil
 
 def merge_date_ranges(date_ranges):
     """
@@ -211,7 +212,6 @@ def main():
     print(f"✓ Created Vessel_Quarterly_Pivot_2025.csv (for backward compatibility)")
     
     # Copy the quarterly breakdown data with date
-    import shutil
     if os.path.exists("quarterly_breakdown_data.csv"):
         quarterly_filename = f"quarterly_breakdown_data_{date_str}.csv"
         shutil.copy("quarterly_breakdown_data.csv", quarterly_filename)
