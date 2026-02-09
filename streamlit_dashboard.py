@@ -15,7 +15,8 @@ st.title("Shearwater Competitor Analysis Dashboard")
 @st.cache_data
 def load_data():
     """Load all required data files"""
-    streamer_df = pd.read_csv("Enhanced_Streamer_Projects.csv")
+    # Load from source file directly (not Enhanced_Streamer_Projects.csv)
+    streamer_df = pd.read_csv("Streamer Projects - SWG - AI.csv")
     vessel_pivot_df = pd.read_csv("Vessel_Quarterly_Pivot_2025.csv")
     
     # Strip whitespace from column names
@@ -197,8 +198,8 @@ gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
 
 # Define phase colors
 phase_colors = {
-    'MC Project Duration (All Activities)': '#0000FF',         # Blue for Multi-Client
-    'Proprietary Project Duration (All Activities)': '#00008B', # Dark blue for Proprietary
+    'MC Project Duration (All Activities)': '#00FF00',         # GREEN for Multi-Client
+    'Proprietary Project Duration (All Activities)': '#00008B', # DARK BLUE for Proprietary
     'Non-Productive Time': '#D3D3D3'                            # Light gray
 }
 
@@ -318,7 +319,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("### Phase Colors")
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.markdown("🔵 **MC Project Duration (All Activities)**")
+    st.markdown("🟢 **MC Project Duration (All Activities)**")
 with col2:
     st.markdown("🟦 **Proprietary Project Duration (All Activities)**")
 with col3:
@@ -329,6 +330,36 @@ st.markdown("---")
 
 # Create Quarterly Vessel Utilization Table
 st.header("Quarterly Vessel Utilization Table")
+
+# Function to merge overlapping date ranges
+def merge_date_ranges(date_ranges):
+    """
+    Merge overlapping date ranges and return the total unique days.
+    Prevents double-counting when a vessel works on multiple overlapping projects.
+    Adjacent ranges (e.g., ending Jan 31, starting Feb 1) are merged as continuous work.
+    """
+    if not date_ranges:
+        return 0
+    
+    # Sort by start date
+    sorted_ranges = sorted(date_ranges, key=lambda x: x[0])
+    
+    # Merge overlapping ranges
+    merged = [sorted_ranges[0]]
+    for current_start, current_end in sorted_ranges[1:]:
+        last_start, last_end = merged[-1]
+        
+        # If current range overlaps or is adjacent (consecutive days), merge them
+        # Adjacent ranges are considered continuous vessel work (e.g., Jan 31 -> Feb 1)
+        if current_start <= last_end + timedelta(days=1):
+            merged[-1] = (last_start, max(last_end, current_end))
+        else:
+            # No overlap, add as new range
+            merged.append((current_start, current_end))
+    
+    # Calculate total days across all merged ranges
+    total_days = sum((end - start).days + 1 for start, end in merged)
+    return total_days
 
 # Function to calculate quarterly utilization
 def calculate_quarterly_utilization(df):
@@ -360,8 +391,8 @@ def calculate_quarterly_utilization(df):
         vessel_projects = df[df['Vessel_Display'] == vessel].copy()
         
         for quarter_name, (q_start, q_end) in quarters.items():
-            # Calculate days in project for this quarter
-            days_in_project = 0
+            # Collect date ranges for this vessel in this quarter
+            date_ranges = []
             
             for idx, row in vessel_projects.iterrows():
                 if pd.isna(row['Mobilisation Start']) or pd.isna(row['Demobilisation End']):
@@ -371,9 +402,12 @@ def calculate_quarterly_utilization(df):
                 project_start = max(row['Mobilisation Start'], q_start)
                 project_end = min(row['Demobilisation End'], q_end)
                 
-                # If there's overlap, count the days
+                # If there's overlap, add the date range
                 if project_start <= project_end:
-                    days_in_project += (project_end - project_start).days + 1
+                    date_ranges.append((project_start, project_end))
+            
+            # Merge overlapping date ranges to get unique days
+            days_in_project = merge_date_ranges(date_ranges)
             
             # Calculate idle/transit days
             total_days_in_quarter = quarter_days[quarter_name]
