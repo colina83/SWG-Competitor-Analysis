@@ -109,7 +109,8 @@ def create_gantt_data(df):
         
         # Determine project type based on Client column
         client = str(row['Client']) if pd.notna(row['Client']) else ''
-        # Multi-Client projects include those with "/" in client name or "Searcher" or multiple parties
+        # Multi-Client projects include those with "/" in client name (indicating multiple parties)
+        # or "Searcher" or explicitly labeled "Multi-Client"
         is_multi_client = ('/' in client or 
                           'Searcher' in client or 
                           'Multi-Client' in client)
