@@ -109,7 +109,10 @@ def create_gantt_data(df):
         
         # Determine project type based on Client column
         client = str(row['Client']) if pd.notna(row['Client']) else ''
-        is_multi_client = client == 'Multi-Client'
+        # Multi-Client projects include those with "/" in client name or "Searcher" or multiple parties
+        is_multi_client = ('/' in client or 
+                          'Searcher' in client or 
+                          'Multi-Client' in client)
         
         if is_multi_client:
             phase_label = 'MC Project Duration (All Activities)'
@@ -150,13 +153,13 @@ def create_gantt_data(df):
         # Update last end date for this vessel
         vessel_last_end[vessel] = row['Demobilisation End']
     
-    # Add pre-project idle period for vessels whose first project doesn't start in January
+    # Add pre-project idle period for vessels whose first project doesn't start on January 1
     start_of_2025 = datetime(2025, 1, 1)
     for vessel in vessel_order:
         if vessel in vessel_first_start:
             first_start = vessel_first_start[vessel]
-            # If first project doesn't start on or before January 31
-            if first_start > datetime(2025, 1, 31):
+            # If first project doesn't start on January 1, add non-productive time
+            if first_start > start_of_2025:
                 tasks.append(dict(
                     Task=vessel,
                     Start=start_of_2025,
@@ -193,7 +196,7 @@ gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
 
 # Define phase colors
 phase_colors = {
-    'MC Project Duration (All Activities)': '#32CD32',         # Green for Multi-Client
+    'MC Project Duration (All Activities)': '#0000FF',         # Blue for Multi-Client
     'Proprietary Project Duration (All Activities)': '#00008B', # Dark blue for Proprietary
     'Non-Productive Time': '#D3D3D3'                            # Light gray
 }
@@ -267,7 +270,7 @@ fig.update_layout(
         side='top',  # Put x-axis on top
         showgrid=True,
         gridcolor='lightgray',
-        range=['2024-12-15', '2026-01-15']
+        range=['2025-01-01', '2026-01-15']
     ),
     yaxis=dict(
         title='',
@@ -314,7 +317,7 @@ st.plotly_chart(fig, use_container_width=True)
 st.markdown("### Phase Colors")
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.markdown("🟩 **MC Project Duration (All Activities)**")
+    st.markdown("🔵 **MC Project Duration (All Activities)**")
 with col2:
     st.markdown("🟦 **Proprietary Project Duration (All Activities)**")
 with col3:
