@@ -18,6 +18,10 @@ def load_data():
     streamer_df = pd.read_csv("Enhanced_Streamer_Projects.csv")
     vessel_pivot_df = pd.read_csv("Vessel_Quarterly_Pivot_2025.csv")
     
+    # Strip whitespace from column names
+    streamer_df.columns = streamer_df.columns.str.strip()
+    vessel_pivot_df.columns = vessel_pivot_df.columns.str.strip()
+    
     # Convert date columns to datetime
     date_cols = ["Mobilisation Start", "Deployment Start", "Production Start", 
                  "Production End", "Retrieval End", "Demobilisation End"]
@@ -63,7 +67,8 @@ def create_gantt_data(df):
     # Sort by vessel and start date
     df_sorted = df.sort_values(['Vessel_Display', 'Mobilisation Start'])
     
-    # Track last end date for each vessel to identify non-productive time
+    # Track first start and last end date for each vessel
+    vessel_first_start = {}
     vessel_last_end = {}
     
     for idx, row in df_sorted.iterrows():
@@ -99,6 +104,22 @@ def create_gantt_data(df):
                 survey_type = 'Survey'
         legend = f"{country} {survey_type}"
         
+        # Get Survey Name for labeling
+        survey_name_label = str(row['Survey Name']) if pd.notna(row['Survey Name']) else ''
+        
+        # Determine project type based on Client column
+        client = str(row['Client']) if pd.notna(row['Client']) else ''
+        is_multi_client = client == 'Multi-Client'
+        
+        if is_multi_client:
+            phase_label = 'MC Project Duration (All Activities)'
+        else:
+            phase_label = 'Proprietary Project Duration (All Activities)'
+        
+        # Track first start date for each vessel
+        if vessel not in vessel_first_start:
+            vessel_first_start[vessel] = row['Mobilisation Start']
+        
         # Check for gap with previous project (non-productive time)
         if vessel in vessel_last_end:
             last_end = vessel_last_end[vessel]
@@ -110,7 +131,9 @@ def create_gantt_data(df):
                     Start=last_end,
                     Finish=current_start,
                     Resource='Non-Productive Time',
-                    Phase='Non-Productive Time'
+                    Phase='Non-Productive Time',
+                    SurveyName='',
+                    IsMultiClient=False
                 ))
         
         # Single project duration (All Activities) - from Mobilization Start to Demobilization End
@@ -119,11 +142,30 @@ def create_gantt_data(df):
             Start=row['Mobilisation Start'],
             Finish=row['Demobilisation End'],
             Resource=legend,
-            Phase='Project Duration (All Activities)'
+            Phase=phase_label,
+            SurveyName=survey_name_label,
+            IsMultiClient=is_multi_client
         ))
         
         # Update last end date for this vessel
         vessel_last_end[vessel] = row['Demobilisation End']
+    
+    # Add pre-project idle period for vessels whose first project doesn't start in January
+    start_of_2025 = datetime(2025, 1, 1)
+    for vessel in vessel_order:
+        if vessel in vessel_first_start:
+            first_start = vessel_first_start[vessel]
+            # If first project doesn't start on or before January 31
+            if first_start > datetime(2025, 1, 31):
+                tasks.append(dict(
+                    Task=vessel,
+                    Start=start_of_2025,
+                    Finish=first_start,
+                    Resource='Non-Productive Time',
+                    Phase='Non-Productive Time',
+                    SurveyName='',
+                    IsMultiClient=False
+                ))
     
     # Add non-productive time from last project end to end of 2025 for each vessel
     end_of_2025 = datetime(2025, 12, 31)
@@ -136,7 +178,9 @@ def create_gantt_data(df):
                     Start=last_end,
                     Finish=end_of_2025,
                     Resource='Non-Productive Time',
-                    Phase='Non-Productive Time'
+                    Phase='Non-Productive Time',
+                    SurveyName='',
+                    IsMultiClient=False
                 ))
     
     return pd.DataFrame(tasks)
@@ -149,8 +193,9 @@ gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
 
 # Define phase colors
 phase_colors = {
-    'Project Duration (All Activities)': '#32CD32',  # Green
-    'Non-Productive Time': '#D3D3D3'                 # Light gray
+    'MC Project Duration (All Activities)': '#32CD32',         # Green for Multi-Client
+    'Proprietary Project Duration (All Activities)': '#00008B', # Dark blue for Proprietary
+    'Non-Productive Time': '#D3D3D3'                            # Light gray
 }
 
 # Create the Plotly figure
@@ -170,12 +215,19 @@ for vessel in vessel_order:
         # Calculate duration in days
         duration = (task['Finish'] - task['Start']).days
         
+        # Determine if we should show text on the bar
+        show_text = task.get('SurveyName', '') != '' and task['Phase'] != 'Non-Productive Time'
+        text_label = task.get('SurveyName', '') if show_text else ''
+        
         fig.add_trace(go.Bar(
             name=task['Resource'],
             x=[task['Finish']],
             y=[vessel],
             orientation='h',
             base=task['Start'],
+            text=text_label,
+            textposition='inside',
+            textfont=dict(color='white', size=10),
             marker=dict(
                 color=phase_colors.get(task['Phase'], '#D3D3D3'),
                 line=dict(color='white', width=0.5)
@@ -184,6 +236,7 @@ for vessel in vessel_order:
                 f"<b>{task['Resource']}</b><br>" +
                 f"Vessel: {vessel}<br>" +
                 f"Phase: {task['Phase']}<br>" +
+                (f"Survey: {task.get('SurveyName', '')}<br>" if task.get('SurveyName', '') else "") +
                 f"Start: {task['Start'].strftime('%Y-%m-%d')}<br>" +
                 f"End: {task['Finish'].strftime('%Y-%m-%d')}<br>" +
                 f"Days: {duration}<br>" +
@@ -259,11 +312,86 @@ st.plotly_chart(fig, use_container_width=True)
 
 # Add color legend
 st.markdown("### Phase Colors")
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 with col1:
-    st.markdown("🟩 **Project Duration (All Activities)**")
+    st.markdown("🟩 **MC Project Duration (All Activities)**")
 with col2:
+    st.markdown("🟦 **Proprietary Project Duration (All Activities)**")
+with col3:
     st.markdown("⬜ **Non-Productive Time**")
+
+# Add separator
+st.markdown("---")
+
+# Create Quarterly Vessel Utilization Table
+st.header("Quarterly Vessel Utilization Table")
+
+# Function to calculate quarterly utilization
+def calculate_quarterly_utilization(df):
+    """Calculate days in project and idle/transit days per vessel per quarter"""
+    
+    # Define quarters
+    quarters = {
+        'Q1': (datetime(2025, 1, 1), datetime(2025, 3, 31)),
+        'Q2': (datetime(2025, 4, 1), datetime(2025, 6, 30)),
+        'Q3': (datetime(2025, 7, 1), datetime(2025, 9, 30)),
+        'Q4': (datetime(2025, 10, 1), datetime(2025, 12, 31))
+    }
+    
+    # Days in each quarter (2025 is not a leap year)
+    quarter_days = {
+        'Q1': 90,  # Jan (31) + Feb (28) + Mar (31)
+        'Q2': 91,  # Apr (30) + May (31) + Jun (30)
+        'Q3': 92,  # Jul (31) + Aug (31) + Sep (30)
+        'Q4': 92   # Oct (31) + Nov (30) + Dec (31)
+    }
+    
+    # Initialize utilization data
+    utilization_data = []
+    
+    for vessel in vessel_order:
+        vessel_data = {'Vessel Name': vessel}
+        
+        # Get all projects for this vessel
+        vessel_projects = df[df['Vessel_Display'] == vessel].copy()
+        
+        for quarter_name, (q_start, q_end) in quarters.items():
+            # Calculate days in project for this quarter
+            days_in_project = 0
+            
+            for idx, row in vessel_projects.iterrows():
+                if pd.isna(row['Mobilisation Start']) or pd.isna(row['Demobilisation End']):
+                    continue
+                
+                # Get overlap between project and quarter
+                project_start = max(row['Mobilisation Start'], q_start)
+                project_end = min(row['Demobilisation End'], q_end)
+                
+                # If there's overlap, count the days
+                if project_start <= project_end:
+                    days_in_project += (project_end - project_start).days + 1
+            
+            # Calculate idle/transit days
+            total_days_in_quarter = quarter_days[quarter_name]
+            idle_transit_days = total_days_in_quarter - days_in_project
+            
+            vessel_data[f'{quarter_name} Days in Project'] = days_in_project
+            vessel_data[f'{quarter_name} Idle/Transit'] = idle_transit_days
+        
+        utilization_data.append(vessel_data)
+    
+    return pd.DataFrame(utilization_data)
+
+# Calculate and display the utilization table
+utilization_df = calculate_quarterly_utilization(streamer_df_2025)
+
+# Display the table with better formatting
+st.dataframe(
+    utilization_df,
+    use_container_width=True,
+    height=450,
+    hide_index=True
+)
 
 # Add separator
 st.markdown("---")
