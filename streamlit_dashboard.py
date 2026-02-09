@@ -338,9 +338,9 @@ def calculate_quarterly_utilization(df):
         'Q4': (datetime(2025, 10, 1), datetime(2025, 12, 31))
     }
     
-    # Days in each quarter
+    # Days in each quarter (2025 is not a leap year)
     quarter_days = {
-        'Q1': 90,  # Jan (31) + Feb (28 in 2025) + Mar (31)
+        'Q1': 90,  # Jan (31) + Feb (28) + Mar (31)
         'Q2': 91,  # Apr (30) + May (31) + Jun (30)
         'Q3': 92,  # Jul (31) + Aug (31) + Sep (30)
         'Q4': 92   # Oct (31) + Nov (30) + Dec (31)
