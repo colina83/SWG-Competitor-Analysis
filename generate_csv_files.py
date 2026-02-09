@@ -90,10 +90,15 @@ def main():
     df['Demobilization (days)'] = (df['Demobilisation End'] - df['Retrieval End']).dt.days
     df['Project Duration'] = (df['Demobilisation End'] - df['Mobilisation Start']).dt.days
     
-    # Save Enhanced_Streamer_Projects.csv
-    print("\nSaving Enhanced_Streamer_Projects.csv...")
+    # Save Enhanced_Streamer_Projects.csv with date
+    date_str = datetime.now().strftime('%Y%m%d')
+    enhanced_filename = f"Enhanced_Streamer_Projects_{date_str}.csv"
+    print(f"\nSaving {enhanced_filename}...")
+    df.to_csv(enhanced_filename, index=False)
+    # Also save without date for backward compatibility
     df.to_csv("Enhanced_Streamer_Projects.csv", index=False)
-    print(f"✓ Created Enhanced_Streamer_Projects.csv with {len(df)} rows and {len(df.columns)} columns")
+    print(f"✓ Created {enhanced_filename} with {len(df)} rows and {len(df.columns)} columns")
+    print(f"✓ Created Enhanced_Streamer_Projects.csv (for backward compatibility)")
     
     # Generate Vessel Quarterly Pivot 2025
     print("\nGenerating Vessel Quarterly Pivot 2025...")
@@ -196,13 +201,29 @@ def main():
     
     vessel_pivot_df = pd.DataFrame(vessel_quarters)
     
-    # Save Vessel_Quarterly_Pivot_2025.csv
-    print("\nSaving Vessel_Quarterly_Pivot_2025.csv...")
+    # Save Vessel_Quarterly_Pivot_2025.csv with date
+    pivot_filename = f"Vessel_Quarterly_Pivot_2025_{date_str}.csv"
+    print(f"\nSaving {pivot_filename}...")
+    vessel_pivot_df.to_csv(pivot_filename, index=False)
+    # Also save without date for backward compatibility
     vessel_pivot_df.to_csv("Vessel_Quarterly_Pivot_2025.csv", index=False)
-    print(f"✓ Created Vessel_Quarterly_Pivot_2025.csv with {len(vessel_pivot_df)} rows and {len(vessel_pivot_df.columns)} columns")
+    print(f"✓ Created {pivot_filename} with {len(vessel_pivot_df)} rows and {len(vessel_pivot_df.columns)} columns")
+    print(f"✓ Created Vessel_Quarterly_Pivot_2025.csv (for backward compatibility)")
+    
+    # Copy the quarterly breakdown data with date
+    import shutil
+    if os.path.exists("quarterly_breakdown_data.csv"):
+        quarterly_filename = f"quarterly_breakdown_data_{date_str}.csv"
+        shutil.copy("quarterly_breakdown_data.csv", quarterly_filename)
+        print(f"✓ Created {quarterly_filename}")
     
     print("\n✅ All CSV files generated successfully!")
-    print("\nGenerated files:")
+    print("\nGenerated files with dates:")
+    print(f"  - {enhanced_filename}")
+    print(f"  - {pivot_filename}")
+    if os.path.exists("quarterly_breakdown_data.csv"):
+        print(f"  - {quarterly_filename}")
+    print("\nBackward compatibility files (without dates):")
     print("  - Enhanced_Streamer_Projects.csv")
     print("  - Vessel_Quarterly_Pivot_2025.csv")
 

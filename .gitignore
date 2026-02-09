@@ -3,3 +3,5 @@ __pycache__/
 *.pyc
 generate_data.py
 executed_notebook.ipynb
+# Exclude dated CSV files (keep non-dated versions for backward compatibility)
+*_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].csv
