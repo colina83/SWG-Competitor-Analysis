@@ -198,7 +198,7 @@ gantt_df = gantt_df.dropna(subset=['Start', 'Finish'])
 
 # Define phase colors
 phase_colors = {
-    'MC Project Duration (All Activities)': '#00FF00',         # GREEN for Multi-Client
+    'MC Project Duration (All Activities)': '#006400',         # DARK GREEN for Multi-Client
     'Proprietary Project Duration (All Activities)': '#00008B', # DARK BLUE for Proprietary
     'Non-Productive Time': '#D3D3D3'                            # Light gray
 }
