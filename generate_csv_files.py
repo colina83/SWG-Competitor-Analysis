@@ -233,8 +233,8 @@ def main():
     # Generate quarterly breakdown data with duration column
     print("\nGenerating Quarterly Breakdown Data...")
     
-    # Build quarterly breakdown for each project
-    quarterly_records = []
+    # Build quarterly breakdown for each project, collecting date ranges per vessel-quarter
+    vessel_quarter_projects = {}  # Key: (vessel, quarter), Value: list of (project_name, survey_type, date_ranges)
     
     for idx, project_row in df_2025.iterrows():
         if pd.isna(project_row['Mobilisation Start']) or pd.isna(project_row['Demobilisation End']):
@@ -250,15 +250,58 @@ def main():
         for quarter in [1, 2, 3, 4]:
             days_in_qtr = calculate_days_in_quarter(mobil_start, demobil_end, 2025, quarter)
             if days_in_qtr > 0:
-                quarterly_records.append({
-                    'Project': project_name,
-                    'Vessel': vessel,
-                    'Survey Type': survey_type,
-                    'Quarter': f'Q{quarter}-2025',
-                    'Duration': days_in_qtr  # Duration in days vessel spent on project during quarter
+                # Calculate the actual date range for this project in this quarter
+                qtr_start_month = (quarter - 1) * 3 + 1
+                qtr_start = pd.Timestamp(year=2025, month=qtr_start_month, day=1)
+                if quarter == 4:
+                    qtr_end = pd.Timestamp(year=2025, month=12, day=31)
+                else:
+                    next_qtr_start = pd.Timestamp(year=2025, month=qtr_start_month + 3, day=1)
+                    qtr_end = next_qtr_start - pd.Timedelta(days=1)
+                
+                overlap_start = max(mobil_start, qtr_start)
+                overlap_end = min(demobil_end, qtr_end)
+                
+                key = (vessel, quarter)
+                if key not in vessel_quarter_projects:
+                    vessel_quarter_projects[key] = []
+                vessel_quarter_projects[key].append({
+                    'project': project_name,
+                    'survey_type': survey_type,
+                    'date_range': (overlap_start, overlap_end)
                 })
     
+    # Now merge overlapping date ranges for each vessel-quarter and create records
+    quarterly_records = []
+    
+    for (vessel, quarter), projects in vessel_quarter_projects.items():
+        # Collect all date ranges for this vessel-quarter
+        date_ranges = [p['date_range'] for p in projects]
+        
+        # Merge overlapping date ranges to get unique days
+        unique_days = merge_date_ranges(date_ranges)
+        
+        # Create a single record per vessel-quarter with the merged duration
+        # Combine all project names and survey types
+        project_names = ', '.join(sorted(set(p['project'].strip() for p in projects)))
+        # Only convert to string after checking for NaN/None
+        survey_types = ', '.join(sorted(set(
+            str(p['survey_type']) for p in projects 
+            if pd.notna(p['survey_type'])
+        )))
+        
+        quarterly_records.append({
+            'Project': project_names,
+            'Vessel': vessel,
+            'Survey Type': survey_types if survey_types else '',  # Use empty string instead of None for consistency
+            'Quarter': f'Q{quarter}-2025',
+            'Duration': unique_days  # Duration in days vessel spent (with overlaps merged)
+        })
+    
     quarterly_breakdown_df = pd.DataFrame(quarterly_records)
+    
+    # Sort by vessel and quarter for better readability
+    quarterly_breakdown_df = quarterly_breakdown_df.sort_values(['Vessel', 'Quarter'])
     
     # Remove old dated files before creating new ones
     remove_old_dated_files("quarterly_breakdown_data", date_str)
