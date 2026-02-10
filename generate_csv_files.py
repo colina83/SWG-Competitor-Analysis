@@ -305,6 +305,7 @@ def main():
             total_allocated = sum(allocated_days_list)
             if total_allocated != unique_days:
                 # Find index of largest allocation and adjust it
+                # Note: If multiple projects have the same max, we use the first one
                 max_idx = allocated_days_list.index(max(allocated_days_list))
                 allocated_days_list[max_idx] += (unique_days - total_allocated)
             
