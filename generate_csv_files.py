@@ -283,13 +283,17 @@ def main():
         
         # Create a single record per vessel-quarter with the merged duration
         # Combine all project names and survey types
-        project_names = ', '.join(sorted(set(p['project'] for p in projects)))
-        survey_types = ', '.join(sorted(set(str(p['survey_type']) for p in projects if pd.notna(p['survey_type']))))
+        project_names = ', '.join(sorted(set(p['project'].strip() for p in projects)))
+        # Only convert to string after checking for NaN/None
+        survey_types = ', '.join(sorted(set(
+            str(p['survey_type']) for p in projects 
+            if pd.notna(p['survey_type'])
+        )))
         
         quarterly_records.append({
             'Project': project_names,
             'Vessel': vessel,
-            'Survey Type': survey_types if survey_types else None,
+            'Survey Type': survey_types if survey_types else '',  # Use empty string instead of None for consistency
             'Quarter': f'Q{quarter}-2025',
             'Duration': unique_days  # Duration in days vessel spent (with overlaps merged)
         })
