@@ -61,6 +61,17 @@ def calculate_days_in_quarter(start_dt, end_dt, year, quarter):
     
     return (overlap_end - overlap_start).days + 1
 
+def remove_old_dated_files(base_name, date_str):
+    """Remove old dated files for the same base name, keeping only today's file."""
+    pattern = f"{base_name}_"
+    for filename in os.listdir('.'):
+        if filename.startswith(pattern) and filename != f"{base_name}_{date_str}.csv":
+            try:
+                os.remove(filename)
+                print(f"  Removed old file: {filename}")
+            except Exception as e:
+                print(f"  Warning: Could not remove {filename}: {e}")
+
 def main():
     # Check if source file exists
     source_file = "Streamer Projects - SWG - AI.csv"
@@ -91,8 +102,13 @@ def main():
     df['Demobilization (days)'] = (df['Demobilisation End'] - df['Retrieval End']).dt.days
     df['Project Duration'] = (df['Demobilisation End'] - df['Mobilisation Start']).dt.days
     
-    # Save Enhanced_Streamer_Projects.csv with date
+    # Get current date string for file naming
     date_str = datetime.now().strftime('%Y%m%d')
+    
+    # Remove old dated files before creating new ones
+    remove_old_dated_files("Enhanced_Streamer_Projects", date_str)
+    
+    # Save Enhanced_Streamer_Projects.csv with date
     enhanced_filename = f"Enhanced_Streamer_Projects_{date_str}.csv"
     print(f"\nSaving {enhanced_filename}...")
     df.to_csv(enhanced_filename, index=False)
@@ -202,6 +218,9 @@ def main():
     
     vessel_pivot_df = pd.DataFrame(vessel_quarters)
     
+    # Remove old dated files before creating new ones
+    remove_old_dated_files("Vessel_Quarterly_Pivot_2025", date_str)
+    
     # Save Vessel_Quarterly_Pivot_2025.csv with date
     pivot_filename = f"Vessel_Quarterly_Pivot_2025_{date_str}.csv"
     print(f"\nSaving {pivot_filename}...")
@@ -211,21 +230,57 @@ def main():
     print(f"✓ Created {pivot_filename} with {len(vessel_pivot_df)} rows and {len(vessel_pivot_df.columns)} columns")
     print(f"✓ Created Vessel_Quarterly_Pivot_2025.csv (for backward compatibility)")
     
-    # Copy the quarterly breakdown data with date
-    if os.path.exists("quarterly_breakdown_data.csv"):
-        quarterly_filename = f"quarterly_breakdown_data_{date_str}.csv"
-        shutil.copy("quarterly_breakdown_data.csv", quarterly_filename)
-        print(f"✓ Created {quarterly_filename}")
+    # Generate quarterly breakdown data with duration column
+    print("\nGenerating Quarterly Breakdown Data...")
+    
+    # Build quarterly breakdown for each project
+    quarterly_records = []
+    
+    for idx, project_row in df_2025.iterrows():
+        if pd.isna(project_row['Mobilisation Start']) or pd.isna(project_row['Demobilisation End']):
+            continue
+        
+        project_name = project_row['Survey Name']
+        vessel = project_row.get('Vessel', None)
+        survey_type = project_row.get('Activity', None)
+        mobil_start = project_row['Mobilisation Start']
+        demobil_end = project_row['Demobilisation End']
+        
+        # Calculate days in each quarter of 2025
+        for quarter in [1, 2, 3, 4]:
+            days_in_qtr = calculate_days_in_quarter(mobil_start, demobil_end, 2025, quarter)
+            if days_in_qtr > 0:
+                quarterly_records.append({
+                    'Project': project_name,
+                    'Vessel': vessel,
+                    'Survey Type': survey_type,
+                    'Quarter': f'Q{quarter}-2025',
+                    'Duration': days_in_qtr  # Duration in days vessel spent on project during quarter
+                })
+    
+    quarterly_breakdown_df = pd.DataFrame(quarterly_records)
+    
+    # Remove old dated files before creating new ones
+    remove_old_dated_files("quarterly_breakdown_data", date_str)
+    
+    # Save quarterly_breakdown_data.csv with date
+    quarterly_filename = f"quarterly_breakdown_data_{date_str}.csv"
+    print(f"\nSaving {quarterly_filename}...")
+    quarterly_breakdown_df.to_csv(quarterly_filename, index=False)
+    # Also save without date for backward compatibility
+    quarterly_breakdown_df.to_csv("quarterly_breakdown_data.csv", index=False)
+    print(f"✓ Created {quarterly_filename} with {len(quarterly_breakdown_df)} rows and {len(quarterly_breakdown_df.columns)} columns")
+    print(f"✓ Created quarterly_breakdown_data.csv (for backward compatibility)")
     
     print("\n✅ All CSV files generated successfully!")
-    print("\nGenerated files with dates:")
+    print("\nGenerated files with dates (overwrites if run same day):")
     print(f"  - {enhanced_filename}")
     print(f"  - {pivot_filename}")
-    if os.path.exists("quarterly_breakdown_data.csv"):
-        print(f"  - {quarterly_filename}")
+    print(f"  - {quarterly_filename}")
     print("\nBackward compatibility files (without dates):")
     print("  - Enhanced_Streamer_Projects.csv")
     print("  - Vessel_Quarterly_Pivot_2025.csv")
+    print("  - quarterly_breakdown_data.csv")
 
 if __name__ == '__main__':
     main()
