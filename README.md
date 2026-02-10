@@ -2,6 +2,22 @@
 
 This repository contains analysis tools for Shearwater competitor project data.
 
+## Quick Start
+
+After updating the source file `Streamer Projects - SWG - AI.csv`, always regenerate all derived files:
+
+**Option 1: Use the automated script (recommended)**
+```bash
+./update_data.sh
+```
+
+**Option 2: Run the Python script directly**
+```bash
+python generate_csv_files.py
+```
+
+This regenerates all derived files (pivot tables, quarterly breakdowns) from the source data.
+
 ## Shearwater Competitor Information Notebook
 
 The main analysis is performed in the Jupyter Notebook: `Shearwater Competitor Information.ipynb`
@@ -85,9 +101,54 @@ The notebook generates one Excel file and multiple CSV files:
 
 Note: CSV output files are excluded from version control (see .gitignore). The Excel file is tracked for sharing.
 
+## CSV File Generator
+
+The repository includes a standalone Python script for generating CSV files: `generate_csv_files.py`
+
+### Purpose
+
+This script reads the source data file and generates all required CSV files for the dashboard without needing Jupyter. It is based on the Jupyter notebook logic but optimized for automation.
+
+### Usage
+
+```bash
+python generate_csv_files.py
+```
+
+### What it does
+
+1. Reads from `Streamer Projects - SWG - AI.csv`
+2. Calculates all phase durations (Mobilization, Deployment, Production, etc.)
+3. Generates `Enhanced_Streamer_Projects.csv` with duration columns
+4. Creates vessel quarterly pivot table for 2025
+5. Generates quarterly breakdown data with proper handling of overlapping projects
+6. Creates both dated versions (with timestamp) and non-dated versions (for backward compatibility)
+7. Automatically removes old dated files
+
+### Output Files
+
+The script generates:
+- `Enhanced_Streamer_Projects.csv` / `Enhanced_Streamer_Projects_YYYYMMDD.csv`
+- `Vessel_Quarterly_Pivot_2025.csv` / `Vessel_Quarterly_Pivot_2025_YYYYMMDD.csv`
+- `quarterly_breakdown_data.csv` / `quarterly_breakdown_data_YYYYMMDD.csv`
+
 ## Data Source
 
-The analysis uses data from: `Streamer Projects - SWG - AI.csv`
+**Primary Source File:** `Streamer Projects - SWG - AI.csv`
+
+This is the **single source of truth** for all data transformations and calculations.
+
+### Updating Data
+
+When the source file is updated, you **must** regenerate the derived files:
+
+```bash
+python generate_csv_files.py
+```
+
+This ensures all pivot tables and quarterly breakdowns are synchronized with the latest source data.
+
+For detailed information about the data flow, see [DATA_FLOW.md](DATA_FLOW.md).
 
 ---
 
