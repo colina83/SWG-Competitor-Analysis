@@ -30,8 +30,8 @@ def merge_date_ranges(date_ranges):
     for current_start, current_end in sorted_ranges[1:]:
         last_start, last_end = merged[-1]
         
-        # If current range overlaps or is adjacent to the last range, merge them
-        if current_start <= last_end + pd.Timedelta(days=1):
+        # If current range overlaps with the last range, merge them
+        if current_start <= last_end:
             merged[-1] = (last_start, max(last_end, current_end))
         else:
             # No overlap, add as new range
@@ -271,26 +271,53 @@ def main():
                     'date_range': (overlap_start, overlap_end)
                 })
     
-    # Create separate records for each project (not merged)
+    # Create records showing unique days per vessel-quarter (avoiding double-counting)
+    # Each vessel-quarter gets one row with merged days, or multiple rows for non-overlapping projects
     quarterly_records = []
     
     for (vessel, quarter), projects in vessel_quarter_projects.items():
-        # Create a separate record for each project
-        for project_info in projects:
-            project_name = project_info['project']
-            survey_type = project_info['survey_type']
-            date_range = project_info['date_range']
-            
-            # Calculate duration for this specific project in this quarter
-            duration = (date_range[1] - date_range[0]).days + 1
-            
+        # Calculate the merged (unique) days for this vessel-quarter
+        date_ranges = [p['date_range'] for p in projects]
+        unique_days = merge_date_ranges(date_ranges)
+        
+        # If there's only one project, show it directly
+        if len(projects) == 1:
+            project_info = projects[0]
             quarterly_records.append({
-                'Project': project_name,
+                'Project': project_info['project'],
                 'Vessel': vessel,
-                'Survey Type': str(survey_type) if pd.notna(survey_type) else '',
+                'Survey Type': str(project_info['survey_type']) if pd.notna(project_info['survey_type']) else '',
                 'Quarter': f'Q{quarter}-2025',
-                'Duration': duration  # Duration in days for this specific project
+                'Duration': unique_days
             })
+        else:
+            # Multiple projects - distribute the merged days proportionally to avoid double-counting
+            total_individual_days = sum((p['date_range'][1] - p['date_range'][0]).days + 1 for p in projects)
+            
+            allocated_days_list = []
+            for project_info in projects:
+                project_days = (project_info['date_range'][1] - project_info['date_range'][0]).days + 1
+                # Allocate merged days proportionally
+                allocated_days = round(unique_days * project_days / total_individual_days)
+                allocated_days_list.append(allocated_days)
+            
+            # Adjust for rounding errors - add/subtract from the largest allocation
+            total_allocated = sum(allocated_days_list)
+            if total_allocated != unique_days:
+                # Find index of largest allocation and adjust it
+                # Note: If multiple projects have the same max, we use the first one
+                max_idx = allocated_days_list.index(max(allocated_days_list))
+                allocated_days_list[max_idx] += (unique_days - total_allocated)
+            
+            # Create records with adjusted allocations
+            for i, project_info in enumerate(projects):
+                quarterly_records.append({
+                    'Project': project_info['project'],
+                    'Vessel': vessel,
+                    'Survey Type': str(project_info['survey_type']) if pd.notna(project_info['survey_type']) else '',
+                    'Quarter': f'Q{quarter}-2025',
+                    'Duration': allocated_days_list[i]
+                })
     
     quarterly_breakdown_df = pd.DataFrame(quarterly_records)
     

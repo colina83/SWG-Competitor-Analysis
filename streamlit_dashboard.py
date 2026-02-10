@@ -349,9 +349,8 @@ def merge_date_ranges(date_ranges):
     for current_start, current_end in sorted_ranges[1:]:
         last_start, last_end = merged[-1]
         
-        # If current range overlaps or is adjacent (consecutive days), merge them
-        # Adjacent ranges are considered continuous vessel work (e.g., Jan 31 -> Feb 1)
-        if current_start <= last_end + timedelta(days=1):
+        # If current range overlaps with the last range, merge them
+        if current_start <= last_end:
             merged[-1] = (last_start, max(last_end, current_end))
         else:
             # No overlap, add as new range
