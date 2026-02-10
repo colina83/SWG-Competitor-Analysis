@@ -240,7 +240,7 @@ def main():
         if pd.isna(project_row['Mobilisation Start']) or pd.isna(project_row['Demobilisation End']):
             continue
         
-        project_name = project_row['Survey Name']
+        project_name = str(project_row['Survey Name']).strip() if pd.notna(project_row['Survey Name']) else ''
         vessel = project_row.get('Vessel', None)
         survey_type = project_row.get('Activity', None)
         mobil_start = project_row['Mobilisation Start']
