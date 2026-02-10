@@ -17,7 +17,7 @@ Jubarte / Baleia Ana 4D,4D,,,,,,#DIV/0!,,Shearwater,Shearwater,Oceanic Vega,Petr
 Jubilee 4D,4D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Tullow Ghana Ltd,Ghana,Yes,Takoradi -  GHANA,1/8/2025,1/12/2025,1/20/2025,3/1/2025,3/3/2025,3/6/2025
 Jubilee / TEN OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,SW Tasman,Tullow Oil plc,Ghana,Yes,Takoradi -  GHANA,10/23/2025,10/29/2025,10/31/2025,1/1/2026,1/1/2026,1/2/2026
 Jubilee / TEN OBN,OBN,,,,,,,Source,Shearwater,Shearwater,SW Gallien,Tullow Oil plc,Ghana,Yes,Takoradi -  GHANA,10/23/2025,10/29/2025,11/2/2025,12/24/2025,12/25/2025,1/2/2026
-KG-UDWHP-2023/1 / KG-UDWHP-2023/2 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,Oceanic Sirius,Oil India Limited,India,In Progress,Off Kakinada -  INDIA,11/2/2025,11/8/2025,11/14/2025,,,
+KG-UDWHP-2023/1 / KG-UDWHP-2023/2 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,Oceanic Sirius,Oil India Limited,India,In Progress,Off Kakinada -  INDIA,11/2/2025,11/8/2025,11/14/2025,12/31/2025,12/31/2025,12/31/2025
 Laxmi Basin National Seismic Program (NSP) 2D,2D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Thuridur,ONGC,India,Yes,Off Mumbai -  INDIA,11/16/2024,11/23/2024,11/25/2024,3/15/2025,3/16/2025,3/21/2025
 Payara East 4D OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,Island Pride,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,At Sea -  GUYANA,10/9/2025,10/9/2025,10/9/2025,10/20/2025,10/20/2025,10/20/2025
 Payara East 4D OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,Island Pride,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,At Sea -  GUYANA,10/27/2025,10/27/2025,10/27/2025,10/31/2025,10/31/2025,10/31/2025
@@ -25,7 +25,7 @@ Payara East 4D OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,Island Pride,Ex
 Payara East 4D OBN,OBN,,,,,,,Source,Shearwater,Shearwater,Amazon Warrior,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,At Sea -  GUYANA,11/18/2025,,11/18/2025,12/1/2025,12/1/2025,12/3/2025
 Pelotas Basin Phase I 3D,3D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Empress,Searcher / Shearwater,Brazil,Yes,Off Rio de Janeiro -  BRAZIL,12/17/2024,12/27/2024,1/6/2025,2/1/2025,,2/1/2025
 Pelotas Basin Phase II 3D,3D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Empress,Searcher / Shearwater,Brazil,Yes,At Sea -  BRAZIL,2/1/2025,,2/1/2025,5/15/2025,5/19/2025,5/24/2025
-Pelotas Basin Phase III 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,SW Empress,Searcher / Shearwater,Brazil,In Progress,Off Rio Grande -  BRAZIL,11/22/2025,11/26/2025,11/30/2025,,,
+Pelotas Basin Phase III 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,SW Empress,Searcher / Shearwater,Brazil,In Progress,Off Rio Grande -  BRAZIL,11/22/2025,11/26/2025,11/30/2025,12/31/2025,12/31/2025,12/31/2025
 Stabroek 4D OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,Island Pride,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,At Sea -  GUYANA,10/31/2025,10/31/2025,10/31/2025,11/28/2025,11/28/2025,11/28/2025
 Stabroek 4D OBN,OBN,,,,,,,Node Handling,Shearwater,Shearwater,Island Pride,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,Carenage -  TRINIDAD AND TOBAGO,4/16/2025,4/21/2025,4/25/2025,10/2/2025,10/2/2025,10/9/2025
 Stabroek 4D OBN,OBN,,,,,,,Source,Shearwater,Shearwater,Amazon Warrior,ExxonMobil Guyana Limited (EMGL),Guyana,Yes,Carenage -  TRINIDAD AND TOBAGO,4/20/2025,5/1/2025,5/4/2025,11/18/2025,,11/18/2025
@@ -36,7 +36,7 @@ Tartaruga Verde B1 4D,4D,,,,,,#DIV/0!,,Shearwater,Shearwater,Oceanic Vega,Petrob
 Tartaruga Verde B1 Undershoot,Undershoot,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Petrobras,Brazil,Yes,At Sea -  BRAZIL,6/30/2025,6/30/2025,7/1/2025,7/15/2025,7/15/2025,7/15/2025
 Tartaruga Verde B1 4D,4D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Petrobras,Brazil,Yes,Niteroi -  BRAZIL,6/6/2025,6/11/2025,6/16/2025,6/28/2025,6/30/2025,6/30/2025
 Tartaruga Verde B1 4D,4D,,,,,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Petrobras,Brazil,Yes,At Sea -  BRAZIL,7/15/2025,7/15/2025,7/18/2025,9/10/2025,9/13/2025,9/18/2025
-Western Niger Delta 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Shearwater / Harvex Geosolutions Limited / Nigerian Upstream Petroleum Regulatory Commission (NUPRC),Nigeria,In Progress,Off Lagos -  NIGERIA,12/28/2025,1/18/2026,,,,
+Western Niger Delta 3D,3D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,SW Duchess,Shearwater / Harvex Geosolutions Limited / Nigerian Upstream Petroleum Regulatory Commission (NUPRC),Nigeria,In Progress,Off Lagos -  NIGERIA,12/28/2025,12/29/2025,12/30/2025,12/31/2025,12/31/2025,12/31/2025
  2D,2D,," $30,469,160 "," $27,422,244.0 ",,,#DIV/0!,,Shearwater,Shearwater,SW Empress,,Sao Tome and Principe,Yes,Off Sao Tome -  SAO TOME AND PRINCIPE,10/1/2025,10/3/2025,10/6/2025,10/22/2025,10/24/2025,10/25/2025
 ,,,,,,,,,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,,,
