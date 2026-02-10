@@ -58,7 +58,21 @@ The following files are **automatically generated** from the source file:
 
 ## How to Update Data
 
-When the source file `Streamer Projects - SWG - AI.csv` is updated, you **MUST** regenerate all derived files by running:
+When the source file `Streamer Projects - SWG - AI.csv` is updated, you **MUST** regenerate all derived files.
+
+### Method 1: Automated Update Script (Recommended)
+
+```bash
+./update_data.sh
+```
+
+This script will:
+- Check that the source file exists
+- Verify Python dependencies are installed
+- Run the CSV generation process
+- Provide clear success/error messages
+
+### Method 2: Direct Python Script
 
 ```bash
 python generate_csv_files.py

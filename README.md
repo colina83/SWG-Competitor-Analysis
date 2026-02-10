@@ -4,8 +4,14 @@ This repository contains analysis tools for Shearwater competitor project data.
 
 ## Quick Start
 
-After updating the source file `Streamer Projects - SWG - AI.csv`, always run:
+After updating the source file `Streamer Projects - SWG - AI.csv`, always regenerate all derived files:
 
+**Option 1: Use the automated script (recommended)**
+```bash
+./update_data.sh
+```
+
+**Option 2: Run the Python script directly**
 ```bash
 python generate_csv_files.py
 ```
