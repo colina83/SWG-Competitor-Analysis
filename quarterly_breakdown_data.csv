@@ -1,32 +1,56 @@
 Project,Vessel,Survey Type,Quarter,Duration
-"EQ25005 Tyrihans 4D, EQ25005 Tyrihans Phase II 4D",Amazon Conqueror,,Q3-2025,48
+EQ25005 Tyrihans 4D,Amazon Conqueror,,Q3-2025,41
+EQ25005 Tyrihans Phase II 4D,Amazon Conqueror,,Q3-2025,8
 Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q1-2025,90
-"Block 63 / Block 52 Ironman 3D, Stabroek 4D OBN",Amazon Warrior,Source,Q2-2025,91
+Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q2-2025,20
+Stabroek 4D OBN,Amazon Warrior,Source,Q2-2025,72
 Stabroek 4D OBN,Amazon Warrior,Source,Q3-2025,92
-"Payara East 4D OBN, Stabroek 4D OBN",Amazon Warrior,Source,Q4-2025,64
+Payara East 4D OBN,Amazon Warrior,Source,Q4-2025,16
+Stabroek 4D OBN,Amazon Warrior,Source,Q4-2025,49
 Stabroek 4D OBN,Island Pride,Node Handling,Q2-2025,76
 Stabroek 4D OBN,Island Pride,Node Handling,Q3-2025,92
-"Payara East 4D OBN, Stabroek 4D OBN",Island Pride,Node Handling,Q4-2025,72
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,12
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,5
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,14
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,29
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,9
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,8
 BP-OSHP-2022/1 3D,Oceanic Sirius,,Q1-2025,59
 BP-OSHP-2022/1 3D,Oceanic Sirius,,Q2-2025,21
-"Jubarte / Baleia Ana 4D, Jubarte / Baleia Ana Undershoot, Tartaruga Verde B1 4D",Oceanic Vega,,Q1-2025,90
-"Jubarte / Baleia Ana 4D, Jubarte / Baleia Ana Undershoot, Tartaruga Verde B1 4D",Oceanic Vega,,Q2-2025,80
+Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q1-2025,2
+Jubarte / Baleia Ana 4D,Oceanic Vega,,Q1-2025,70
+Tartaruga Verde B1 4D,Oceanic Vega,,Q1-2025,21
+Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q2-2025,67
+Jubarte / Baleia Ana 4D,Oceanic Vega,,Q2-2025,72
+Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025,2
+Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025,7
 Tartaruga Verde B1 4D,Oceanic Vega,,Q3-2025,20
 Bengal National Seismic Program (NSP) 2D,SW Bly,,Q1-2025,69
 Bengal National Seismic Program (NSP) 2D,SW Bly,,Q2-2025,86
 Jubilee 4D,SW Duchess,,Q1-2025,58
-"Tartaruga Verde B1 4D, Tartaruga Verde B1 Undershoot",SW Duchess,,Q2-2025,25
-"Tartaruga Verde B1 4D, Tartaruga Verde B1 Undershoot",SW Duchess,,Q3-2025,80
-"Pelotas Basin Phase I 3D, Pelotas Basin Phase II 3D",SW Empress,,Q1-2025,90
+Tartaruga Verde B1 Undershoot,SW Duchess,,Q2-2025,1
+Tartaruga Verde B1 4D,SW Duchess,,Q2-2025,25
+Tartaruga Verde B1 Undershoot,SW Duchess,,Q3-2025,15
+Tartaruga Verde B1 4D,SW Duchess,,Q3-2025,66
+Pelotas Basin Phase I 3D,SW Empress,,Q1-2025,32
+Pelotas Basin Phase II 3D,SW Empress,,Q1-2025,59
 Pelotas Basin Phase II 3D,SW Empress,,Q2-2025,54
 STP02 3D,SW Empress,,Q3-2025,92
-"2D, STP02 3D",SW Empress,,Q4-2025,25
+STP02 3D,SW Empress,,Q4-2025,1
+2D,SW Empress,,Q4-2025,25
 Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q1-2025,83
-"Block 20 Kaminho OBN, Block 32 Louro / Mostarda 4D OBN",SW Gallien,Source,Q2-2025,91
-"Block 15 OBN, Block 20 Kaminho OBN",SW Gallien,Source,Q3-2025,61
-"Block 15 OBN, Jubilee / TEN OBN",SW Gallien,Source,Q4-2025,92
-"Block 32 Louro / Mostarda 4D OBN, CI-40 Kossipo OBN",SW Tasman,"Node Layout, Node Layout / Source",Q1-2025,82
-"Block 20 Kaminho OBN, Block 32 Louro / Mostarda 4D OBN",SW Tasman,Node Layout,Q2-2025,91
-"Block 15 OBN, Block 20 Kaminho OBN",SW Tasman,"Node Handling, Node Layout",Q3-2025,60
-"Block 15 OBN, Jubilee / TEN OBN",SW Tasman,Node Handling,Q4-2025,92
+Block 20 Kaminho OBN,SW Gallien,Source,Q2-2025,74
+Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q2-2025,18
+Block 15 OBN,SW Gallien,Source,Q3-2025,40
+Block 20 Kaminho OBN,SW Gallien,Source,Q3-2025,21
+Block 15 OBN,SW Gallien,Source,Q4-2025,23
+Jubilee / TEN OBN,SW Gallien,Source,Q4-2025,70
+Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q1-2025,71
+CI-40 Kossipo OBN,SW Tasman,Node Layout / Source,Q1-2025,11
+Block 20 Kaminho OBN,SW Tasman,Node Layout,Q2-2025,73
+Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q2-2025,19
+Block 15 OBN,SW Tasman,Node Handling,Q3-2025,39
+Block 20 Kaminho OBN,SW Tasman,Node Layout,Q3-2025,21
+Block 15 OBN,SW Tasman,Node Handling,Q4-2025,23
+Jubilee / TEN OBN,SW Tasman,Node Handling,Q4-2025,70
 Laxmi Basin National Seismic Program (NSP) 2D,SW Thuridur,,Q1-2025,80

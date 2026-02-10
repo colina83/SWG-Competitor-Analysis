@@ -240,7 +240,7 @@ def main():
         if pd.isna(project_row['Mobilisation Start']) or pd.isna(project_row['Demobilisation End']):
             continue
         
-        project_name = project_row['Survey Name']
+        project_name = str(project_row['Survey Name']).strip() if pd.notna(project_row['Survey Name']) else ''
         vessel = project_row.get('Vessel', None)
         survey_type = project_row.get('Activity', None)
         mobil_start = project_row['Mobilisation Start']
@@ -271,32 +271,26 @@ def main():
                     'date_range': (overlap_start, overlap_end)
                 })
     
-    # Now merge overlapping date ranges for each vessel-quarter and create records
+    # Create separate records for each project (not merged)
     quarterly_records = []
     
     for (vessel, quarter), projects in vessel_quarter_projects.items():
-        # Collect all date ranges for this vessel-quarter
-        date_ranges = [p['date_range'] for p in projects]
-        
-        # Merge overlapping date ranges to get unique days
-        unique_days = merge_date_ranges(date_ranges)
-        
-        # Create a single record per vessel-quarter with the merged duration
-        # Combine all project names and survey types
-        project_names = ', '.join(sorted(set(p['project'].strip() for p in projects)))
-        # Only convert to string after checking for NaN/None
-        survey_types = ', '.join(sorted(set(
-            str(p['survey_type']) for p in projects 
-            if pd.notna(p['survey_type'])
-        )))
-        
-        quarterly_records.append({
-            'Project': project_names,
-            'Vessel': vessel,
-            'Survey Type': survey_types if survey_types else '',  # Use empty string instead of None for consistency
-            'Quarter': f'Q{quarter}-2025',
-            'Duration': unique_days  # Duration in days vessel spent (with overlaps merged)
-        })
+        # Create a separate record for each project
+        for project_info in projects:
+            project_name = project_info['project']
+            survey_type = project_info['survey_type']
+            date_range = project_info['date_range']
+            
+            # Calculate duration for this specific project in this quarter
+            duration = (date_range[1] - date_range[0]).days + 1
+            
+            quarterly_records.append({
+                'Project': project_name,
+                'Vessel': vessel,
+                'Survey Type': str(survey_type) if pd.notna(survey_type) else '',
+                'Quarter': f'Q{quarter}-2025',
+                'Duration': duration  # Duration in days for this specific project
+            })
     
     quarterly_breakdown_df = pd.DataFrame(quarterly_records)
     
