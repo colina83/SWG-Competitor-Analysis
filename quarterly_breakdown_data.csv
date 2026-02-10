@@ -1,42 +1,56 @@
-Project,Vessel,Survey Type,Quarter
-Bengal National Seismic Program (NSP) 2D,SW Bly,,Q1-2025
-Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q1-2025
-Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q1-2025
-Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q1-2025
-BP-OSHP-2022/1 3D,Oceanic Sirius,,Q1-2025
-CI-40 Kossipo OBN,SW Tasman,Node Layout / Source,Q1-2025
-Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q1-2025
-Jubarte / Baleia Ana 4D,Oceanic Vega,,Q1-2025
-Jubilee 4D,SW Duchess,,Q1-2025
-Laxmi Basin National Seismic Program (NSP) 2D,SW Thuridur,,Q1-2025
-Pelotas Basin Phase I 3D,SW Empress,,Q1-2025
-Pelotas Basin Phase II 3D,SW Empress,,Q1-2025
-Tartaruga Verde B1 4D,Oceanic Vega,,Q1-2025
-Bengal National Seismic Program (NSP) 2D,SW Bly,,Q2-2025
-Block 20 Kaminho OBN,SW Tasman,Node Layout,Q2-2025
-Block 20 Kaminho OBN,SW Gallien,Source,Q2-2025
-Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q2-2025
-Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q2-2025
-Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q2-2025
-BP-OSHP-2022/1 3D,Oceanic Sirius,,Q2-2025
-Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q2-2025
-Jubarte / Baleia Ana 4D,Oceanic Vega,,Q2-2025
-Pelotas Basin Phase II 3D,SW Empress,,Q2-2025
-Stabroek 4D OBN,Island Pride,Node Handling,Q2-2025
-Stabroek 4D OBN,Amazon Warrior,Source,Q2-2025
-Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025
-Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025
-Tartaruga Verde B1 Undershoot,SW Duchess,,Q2-2025
-Tartaruga Verde B1 4D,SW Duchess,,Q2-2025
-Block 15 OBN,SW Tasman,Node Handling,Q3-2025
-Block 15 OBN,SW Gallien,Source,Q3-2025
-Block 20 Kaminho OBN,SW Tasman,Node Layout,Q3-2025
-Block 20 Kaminho OBN,SW Gallien,Source,Q3-2025
-EQ25005 Tyrihans 4D,Amazon Conqueror,,Q3-2025
-EQ25005 Tyrihans Phase II 4D,Amazon Conqueror,,Q3-2025
-Stabroek 4D OBN,Island Pride,Node Handling,Q3-2025
-Stabroek 4D OBN,Amazon Warrior,Source,Q3-2025
-STP02 3D,SW Empress,,Q3-2025
-Tartaruga Verde B1 4D,Oceanic Vega,,Q3-2025
-Tartaruga Verde B1 Undershoot,SW Duchess,,Q3-2025
-Tartaruga Verde B1 4D,SW Duchess,,Q3-2025
+Project,Vessel,Survey Type,Quarter,Duration
+Bengal National Seismic Program (NSP) 2D,SW Bly,,Q1-2025,69
+Bengal National Seismic Program (NSP) 2D,SW Bly,,Q2-2025,86
+Block 15 OBN,SW Tasman,Node Handling,Q3-2025,39
+Block 15 OBN,SW Tasman,Node Handling,Q4-2025,23
+Block 15 OBN,SW Gallien,Source,Q3-2025,40
+Block 15 OBN,SW Gallien,Source,Q4-2025,23
+Block 20 Kaminho OBN,SW Tasman,Node Layout,Q2-2025,73
+Block 20 Kaminho OBN,SW Tasman,Node Layout,Q3-2025,21
+Block 20 Kaminho OBN,SW Gallien,Source,Q2-2025,74
+Block 20 Kaminho OBN,SW Gallien,Source,Q3-2025,21
+Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q1-2025,83
+Block 32 Louro / Mostarda 4D OBN,SW Gallien,Source,Q2-2025,18
+Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q1-2025,71
+Block 32 Louro / Mostarda 4D OBN,SW Tasman,Node Layout,Q2-2025,19
+Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q1-2025,90
+Block 63 / Block 52 Ironman 3D,Amazon Warrior,,Q2-2025,20
+BP-OSHP-2022/1 3D,Oceanic Sirius,,Q1-2025,59
+BP-OSHP-2022/1 3D,Oceanic Sirius,,Q2-2025,21
+CI-40 Kossipo OBN,SW Tasman,Node Layout / Source,Q1-2025,11
+EQ25005 Tyrihans 4D,Amazon Conqueror,,Q3-2025,41
+EQ25005 Tyrihans Phase II 4D,Amazon Conqueror,,Q3-2025,8
+Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q1-2025,2
+Jubarte / Baleia Ana Undershoot,Oceanic Vega,,Q2-2025,67
+Jubarte / Baleia Ana 4D,Oceanic Vega,,Q1-2025,70
+Jubarte / Baleia Ana 4D,Oceanic Vega,,Q2-2025,72
+Jubilee 4D,SW Duchess,,Q1-2025,58
+Jubilee / TEN OBN,SW Tasman,Node Handling,Q4-2025,70
+Jubilee / TEN OBN,SW Gallien,Source,Q4-2025,70
+Laxmi Basin National Seismic Program (NSP) 2D,SW Thuridur,,Q1-2025,80
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,12
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,5
+Payara East 4D OBN,Island Pride,Node Handling,Q4-2025,14
+Payara East 4D OBN,Amazon Warrior,Source,Q4-2025,16
+Pelotas Basin Phase I 3D,SW Empress,,Q1-2025,32
+Pelotas Basin Phase II 3D,SW Empress,,Q1-2025,59
+Pelotas Basin Phase II 3D,SW Empress,,Q2-2025,54
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,29
+Stabroek 4D OBN,Island Pride,Node Handling,Q2-2025,76
+Stabroek 4D OBN,Island Pride,Node Handling,Q3-2025,92
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,9
+Stabroek 4D OBN,Amazon Warrior,Source,Q2-2025,72
+Stabroek 4D OBN,Amazon Warrior,Source,Q3-2025,92
+Stabroek 4D OBN,Amazon Warrior,Source,Q4-2025,49
+Stabroek 4D OBN,Island Pride,Node Handling,Q4-2025,8
+STP02 3D,SW Empress,,Q3-2025,92
+STP02 3D,SW Empress,,Q4-2025,1
+Tartaruga Verde B1 4D,Oceanic Vega,,Q1-2025,21
+Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025,2
+Tartaruga Verde B1 4D,Oceanic Vega,,Q2-2025,7
+Tartaruga Verde B1 4D,Oceanic Vega,,Q3-2025,20
+Tartaruga Verde B1 Undershoot,SW Duchess,,Q2-2025,1
+Tartaruga Verde B1 Undershoot,SW Duchess,,Q3-2025,15
+Tartaruga Verde B1 4D,SW Duchess,,Q2-2025,25
+Tartaruga Verde B1 4D,SW Duchess,,Q3-2025,66
+ 2D,SW Empress,,Q4-2025,25
