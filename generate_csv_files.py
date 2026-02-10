@@ -65,7 +65,7 @@ def remove_old_dated_files(base_name, date_str):
     """Remove old dated files for the same base name, keeping only today's file."""
     pattern = f"{base_name}_"
     for filename in os.listdir('.'):
-        if filename.startswith(pattern) and filename != f"{base_name}_{date_str}.csv":
+        if filename.startswith(pattern) and filename.endswith('.csv') and filename != f"{base_name}_{date_str}.csv":
             try:
                 os.remove(filename)
                 print(f"  Removed old file: {filename}")
