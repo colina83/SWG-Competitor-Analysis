@@ -221,8 +221,8 @@ for vessel in vessel_order:
         duration = (task['Finish'] - task['Start']).days
         
         # Determine if we should show text on the bar
-        show_text = task.get('SurveyName', '') != '' and task['Phase'] != 'Non-Productive Time'
-        text_label = task.get('SurveyName', '') if show_text else ''
+        show_text = task['Phase'] != 'Non-Productive Time'
+        text_label = task['Resource'] if show_text else ''
         
         fig.add_trace(go.Bar(
             name=task['Resource'],
