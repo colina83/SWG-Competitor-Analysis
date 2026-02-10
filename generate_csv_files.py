@@ -93,6 +93,14 @@ def main():
     for col in date_cols:
         df[col] = pd.to_datetime(df[col], errors='coerce')
     
+    # For ongoing projects with no demobilization date, use December 31, 2025
+    # to account for Q4 days
+    ongoing_projects = df['Demobilisation End'].isna() & df['Mobilisation Start'].notna()
+    if ongoing_projects.any():
+        default_demob_date = pd.to_datetime('2025-12-31')
+        df.loc[ongoing_projects, 'Demobilisation End'] = default_demob_date
+        print(f"\nSet demobilization date to 2025-12-31 for {ongoing_projects.sum()} ongoing projects")
+    
     # Calculate phase durations
     print("\nCalculating phase durations...")
     df['Mobilization (days)'] = (df['Deployment Start'] - df['Mobilisation Start']).dt.days
